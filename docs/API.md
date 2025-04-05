@@ -1,30 +1,31 @@
-# API Documentation
+# SolarMed AI API Documentation
 
-This document provides detailed information about the SolarMed AI API endpoints, request/response formats, and authentication.
+## Overview
 
-## Base URL
-
-The base URL for all API endpoints is: `http://localhost:8000`
+The SolarMed AI API provides a RESTful interface for managing patient data, diagnoses, and system settings. The API is built with FastAPI and includes OpenAPI/Swagger documentation.
 
 ## Authentication
 
-SolarMed AI uses JWT (JSON Web Token) based authentication.
-
-### Get Access Token
+All API endpoints require authentication using JWT tokens. Include the token in the Authorization header:
 
 ```
-POST /auth/token
+Authorization: Bearer <your_token>
 ```
 
-**Request Body:**
-```json
+### Authentication Endpoints
+
+#### Login
+```http
+POST /api/auth/login
+Content-Type: application/json
+
 {
   "username": "string",
   "password": "string"
 }
 ```
 
-**Response:**
+Response:
 ```json
 {
   "access_token": "string",
@@ -32,431 +33,181 @@ POST /auth/token
 }
 ```
 
-**Usage:**
-Include the token in the Authorization header for protected endpoints:
-```
-Authorization: Bearer {access_token}
-```
-
-## Patients API
-
-### List All Patients
-
-```
-GET /api/patients
+#### Refresh Token
+```http
+POST /api/auth/refresh
+Authorization: Bearer <refresh_token>
 ```
 
-**Query Parameters:**
-- `skip` (integer, optional): Number of records to skip
-- `limit` (integer, optional): Maximum number of records to return
+## Patient Management
 
-**Response:**
-```json
-[
-  {
-    "id": 1,
-    "name": "string",
-    "age": 0,
-    "gender": "string",
-    "location": "string",
-    "contact": "string",
-    "created_at": "2025-04-05T03:00:00.000Z",
-    "updated_at": "2025-04-05T03:00:00.000Z"
-  }
-]
+### Create Patient
+```http
+POST /api/patients
+Content-Type: application/json
+
+{
+  "name": "string",
+  "age": "integer",
+  "gender": "string",
+  "contact": "string",
+  "medical_history": "string"
+}
 ```
 
-### Get Patient Details
-
-```
+### Get Patient
+```http
 GET /api/patients/{patient_id}
 ```
 
-**Path Parameters:**
-- `patient_id` (integer, required): ID of the patient
-
-**Response:**
-```json
-{
-  "id": 1,
-  "name": "string",
-  "age": 0,
-  "gender": "string",
-  "location": "string",
-  "contact": "string",
-  "created_at": "2025-04-05T03:00:00.000Z",
-  "updated_at": "2025-04-05T03:00:00.000Z"
-}
-```
-
-### Create New Patient
-
-```
-POST /api/patients
-```
-
-**Request Body:**
-```json
-{
-  "name": "string",
-  "age": 0,
-  "gender": "string",
-  "location": "string",
-  "contact": "string"
-}
-```
-
-**Response:**
-```json
-{
-  "id": 1,
-  "name": "string",
-  "age": 0,
-  "gender": "string",
-  "location": "string",
-  "contact": "string",
-  "created_at": "2025-04-05T03:00:00.000Z",
-  "updated_at": "2025-04-05T03:00:00.000Z"
-}
-```
-
 ### Update Patient
-
-```
+```http
 PUT /api/patients/{patient_id}
-```
+Content-Type: application/json
 
-**Path Parameters:**
-- `patient_id` (integer, required): ID of the patient
-
-**Request Body:**
-```json
 {
   "name": "string",
-  "age": 0,
+  "age": "integer",
   "gender": "string",
-  "location": "string",
-  "contact": "string"
-}
-```
-
-**Response:**
-```json
-{
-  "id": 1,
-  "name": "string",
-  "age": 0,
-  "gender": "string",
-  "location": "string",
   "contact": "string",
-  "created_at": "2025-04-05T03:00:00.000Z",
-  "updated_at": "2025-04-05T03:00:00.000Z"
+  "medical_history": "string"
 }
 ```
 
-### Delete Patient
-
-```
-DELETE /api/patients/{patient_id}
-```
-
-**Path Parameters:**
-- `patient_id` (integer, required): ID of the patient
-
-**Response:**
-- Status: 204 No Content
-
-### Get Patient Diagnoses
-
-```
-GET /api/patients/{patient_id}/diagnoses
+### List Patients
+```http
+GET /api/patients
+Query Parameters:
+  - page: integer
+  - limit: integer
+  - search: string
 ```
 
-**Path Parameters:**
-- `patient_id` (integer, required): ID of the patient
+## Diagnosis
 
-**Response:**
-```json
-[
-  {
-    "id": 1,
-    "patient_id": 1,
-    "symptoms": "string",
-    "diagnosis": "string",
-    "confidence": 0.0,
-    "image_path": "string",
-    "voice_path": "string",
-    "created_at": "2025-04-05T03:00:00.000Z",
-    "synced": false
-  }
-]
-```
+### Create Diagnosis
+```http
+POST /api/diagnoses
+Content-Type: application/json
 
-## Diagnosis API
-
-### List All Diagnoses
-
-```
-GET /api/diagnose
-```
-
-**Query Parameters:**
-- `skip` (integer, optional): Number of records to skip
-- `limit` (integer, optional): Maximum number of records to return
-
-**Response:**
-```json
-[
-  {
-    "id": 1,
-    "patient_id": 1,
-    "symptoms": "string",
-    "diagnosis": "string",
-    "confidence": 0.0,
-    "image_path": "string",
-    "voice_path": "string",
-    "created_at": "2025-04-05T03:00:00.000Z",
-    "synced": false
-  }
-]
-```
-
-### Get Diagnosis Details
-
-```
-GET /api/diagnose/{diagnosis_id}
-```
-
-**Path Parameters:**
-- `diagnosis_id` (integer, required): ID of the diagnosis
-
-**Response:**
-```json
 {
-  "id": 1,
-  "patient_id": 1,
-  "symptoms": "string",
+  "patient_id": "string",
+  "symptoms": ["string"],
+  "observations": "string",
   "diagnosis": "string",
-  "confidence": 0.0,
-  "image_path": "string",
-  "voice_path": "string",
-  "created_at": "2025-04-05T03:00:00.000Z",
-  "synced": false
+  "treatment": "string"
 }
 ```
 
-### Create New Diagnosis
-
+### Get Diagnosis
+```http
+GET /api/diagnoses/{diagnosis_id}
 ```
-POST /api/diagnose
-```
 
-**Request Body (multipart/form-data):**
-- `patient_id` (integer, required): ID of the patient
-- `symptoms` (string, required): Comma-separated list of symptoms
-- `image` (file, optional): Image file for diagnosis
-- `voice` (file, optional): Voice recording file
+### Update Diagnosis
+```http
+PUT /api/diagnoses/{diagnosis_id}
+Content-Type: application/json
 
-**Response:**
-```json
 {
-  "id": 1,
-  "patient_id": 1,
-  "symptoms": "string",
+  "symptoms": ["string"],
+  "observations": "string",
   "diagnosis": "string",
-  "confidence": 0.0,
-  "image_path": "string",
-  "voice_path": "string",
-  "created_at": "2025-04-05T03:00:00.000Z",
-  "synced": false
+  "treatment": "string"
 }
 ```
 
-### Get Patient Diagnoses
-
-```
-GET /api/diagnose/patient/{patient_id}
-```
-
-**Path Parameters:**
-- `patient_id` (integer, required): ID of the patient
-
-**Response:**
-```json
-[
-  {
-    "id": 1,
-    "patient_id": 1,
-    "symptoms": "string",
-    "diagnosis": "string",
-    "confidence": 0.0,
-    "image_path": "string",
-    "voice_path": "string",
-    "created_at": "2025-04-05T03:00:00.000Z",
-    "synced": false
-  }
-]
+### List Diagnoses
+```http
+GET /api/diagnoses
+Query Parameters:
+  - patient_id: string
+  - page: integer
+  - limit: integer
 ```
 
-## Energy API
+## Energy Monitoring
 
-### List Energy Logs
-
-```
-GET /api/energy
-```
-
-**Query Parameters:**
-- `skip` (integer, optional): Number of records to skip
-- `limit` (integer, optional): Maximum number of records to return
-
-**Response:**
-```json
-[
-  {
-    "id": 1,
-    "battery_level": 0.0,
-    "solar_input": 0.0,
-    "power_consumption": 0.0,
-    "timestamp": "2025-04-05T03:00:00.000Z",
-    "synced": false
-  }
-]
+### Get Energy Status
+```http
+GET /api/energy/status
 ```
 
-### Get Latest Energy Status
-
-```
-GET /api/energy/latest
-```
-
-**Response:**
+Response:
 ```json
 {
-  "id": 1,
-  "battery_level": 0.0,
-  "solar_input": 0.0,
-  "power_consumption": 0.0,
-  "timestamp": "2025-04-05T03:00:00.000Z",
-  "synced": false
+  "battery_level": "float",
+  "solar_power": "float",
+  "power_consumption": "float",
+  "estimated_runtime": "integer"
 }
 ```
 
-### Create Energy Log
-
-```
-POST /api/energy
-```
-
-**Request Body:**
-```json
-{
-  "battery_level": 0.0,
-  "solar_input": 0.0,
-  "power_consumption": 0.0
-}
+### Get Energy History
+```http
+GET /api/energy/history
+Query Parameters:
+  - start_date: string (ISO format)
+  - end_date: string (ISO format)
+  - interval: string (hourly/daily)
 ```
 
-**Response:**
-```json
-{
-  "id": 1,
-  "battery_level": 0.0,
-  "solar_input": 0.0,
-  "power_consumption": 0.0,
-  "timestamp": "2025-04-05T03:00:00.000Z",
-  "synced": false
-}
-```
+## Data Synchronization
 
-### Simulate Energy Reading
-
-```
-GET /api/energy/simulate
-```
-
-**Response:**
-```json
-{
-  "id": 1,
-  "battery_level": 0.0,
-  "solar_input": 0.0,
-  "power_consumption": 0.0,
-  "timestamp": "2025-04-05T03:00:00.000Z",
-  "synced": false
-}
-```
-
-### Get Energy Statistics
-
-```
-GET /api/energy/stats
-```
-
-**Query Parameters:**
-- `days` (integer, optional): Number of days to analyze, defaults to 1
-
-**Response:**
-```json
-{
-  "average_battery": 0.0,
-  "average_solar": 0.0,
-  "average_consumption": 0.0,
-  "net_power": 0.0,
-  "estimated_runtime": "string",
-  "days_analyzed": 0
-}
-```
-
-## Sync API
-
-### Sync Data to Cloud
-
-```
+### Sync Data
+```http
 POST /api/sync
-```
+Content-Type: application/json
 
-**Response:**
-```json
 {
-  "success": true,
-  "synced_diagnoses": 0,
-  "synced_energy_logs": 0,
-  "message": "string",
-  "timestamp": "2025-04-05T03:00:00.000Z"
+  "patients": [
+    {
+      "id": "string",
+      "action": "string",
+      "data": "object"
+    }
+  ],
+  "diagnoses": [
+    {
+      "id": "string",
+      "action": "string",
+      "data": "object"
+    }
+  ]
 }
 ```
 
 ### Get Sync Status
-
-```
+```http
 GET /api/sync/status
 ```
 
-**Response:**
+Response:
 ```json
 {
-  "unsynced_diagnoses": 0,
-  "unsynced_energy_logs": 0,
-  "total_unsynced": 0,
-  "last_sync": "2025-04-05T03:00:00.000Z"
+  "last_sync": "string",
+  "pending_changes": "integer",
+  "sync_status": "string"
 }
 ```
 
-### Pull Data from Cloud
+## Settings
 
-```
-POST /api/sync/pull
+### Get Settings
+```http
+GET /api/settings
 ```
 
-**Response:**
-```json
+### Update Settings
+```http
+PUT /api/settings
+Content-Type: application/json
+
 {
-  "success": true,
-  "message": "string",
-  "new_patients": 0,
-  "new_diagnoses": 0,
-  "timestamp": "2025-04-05T03:00:00.000Z"
+  "language": "string",
+  "theme": "string",
+  "notifications": "boolean",
+  "sync_interval": "integer"
 }
 ```
 
@@ -467,7 +218,7 @@ All endpoints may return the following error responses:
 ### 400 Bad Request
 ```json
 {
-  "detail": "Invalid request parameters"
+  "detail": "string"
 }
 ```
 
@@ -498,3 +249,33 @@ All endpoints may return the following error responses:
   "detail": "Internal server error"
 }
 ```
+
+## Rate Limiting
+
+API requests are limited to:
+- 100 requests per minute for authenticated users
+- 20 requests per minute for unauthenticated users
+
+## Versioning
+
+The API is versioned through the URL path:
+```
+/api/v1/...
+```
+
+## OpenAPI Documentation
+
+Interactive API documentation is available at:
+```
+/docs
+```
+
+## Offline Support
+
+The API supports offline operations through:
+- Background synchronization
+- Conflict resolution
+- Data versioning
+- Cache management
+
+For detailed information about offline functionality, see [OFFLINE.md](OFFLINE.md).
