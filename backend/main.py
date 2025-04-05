@@ -75,6 +75,21 @@ def create_access_token(data: dict):
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
+# Health check endpoints
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy", "timestamp": datetime.utcnow()}
+
+@app.get("/health/db")
+async def db_health_check():
+    # TODO: Implement database connection check
+    return {"status": "healthy", "database": "connected"}
+
+@app.get("/health/sync")
+async def sync_health_check():
+    # TODO: Implement sync status check
+    return {"status": "healthy", "sync": "active"}
+
 # API Endpoints
 @app.post("/token")
 async def login(form_data: OAuth2PasswordRequestForm = Depends()):

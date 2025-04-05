@@ -217,41 +217,38 @@ export default {
       // Add event listeners for online/offline status
       window.addEventListener("online", () => (this.isOnline = true));
       window.addEventListener("offline", () => (this.isOnline = false));
+    }, 1000);
+  },
+  methods: {
+    formatDate(date) {
+      if (!date) return '';
+      const d = new Date(date);
+      return d.toLocaleDateString('en-UG') + ' ' + d.toLocaleTimeString('en-UG', { hour: '2-digit', minute: '2-digit' });
     },
-    methods: {
-      formatDate(date) {
-        if (!date) return '';
-        const d = new Date(date);
-        return d.toLocaleDateString('en-UG') + ' ' + d.toLocaleTimeString('en-UG', { hour: '2-digit', minute: '2-digit' });
-      },
-      getRandomDiagnosis() {
-        const diagnoses = ['malaria', 'pneumonia', 'covid19', 'tuberculosis', 'maternal_complication'];
-        return diagnoses[Math.floor(Math.random() * diagnoses.length)];
-      },
-      getBgColorByConfidence(confidence) {
-        if (confidence >= 0.8) return 'bg-green-50';
-        if (confidence >= 0.6) return 'bg-yellow-50';
-        return 'bg-red-50';
-      },
-      getConfidenceBadgeColor(confidence) {
-        if (confidence >= 0.8) return 'bg-green-600';
-        if (confidence >= 0.6) return 'bg-yellow-600';
-        return 'bg-red-600';
-      },
-      printDiagnosis() {
-        // In a real implementation, this would generate a printable report
-        this.$parent.showToastMessage('Preparing print report...');
-        setTimeout(() => {
-          window.print();
-        }, 500);
-      },
-      saveDiagnosis() {
-        // TODO: Implement API call to save diagnosis
-        this.$parent.showToastMessage('Saving diagnosis...');
-        setTimeout(() => {
-          this.$parent.showToastMessage('Diagnosis saved successfully');
-        }, 500);
-      }
+    getRandomDiagnosis() {
+      const diagnoses = ['malaria', 'pneumonia', 'covid19', 'tuberculosis', 'maternal_complication'];
+      return diagnoses[Math.floor(Math.random() * diagnoses.length)];
+    },
+    getBgColorByConfidence(confidence) {
+      if (confidence >= 0.8) return 'bg-green-50';
+      if (confidence >= 0.6) return 'bg-yellow-50';
+      return 'bg-red-50';
+    },
+    getConfidenceBadgeColor(confidence) {
+      if (confidence >= 0.8) return 'bg-green-600';
+      if (confidence >= 0.6) return 'bg-yellow-600';
+      return 'bg-red-600';
+    },
+    printDiagnosis() {
+      // In a real implementation, this would generate a printable report
+      this.$parent.showToastMessage('Preparing print report...');
+      setTimeout(() => {
+        window.print();
+      }, 500);
+    },
+    saveDiagnosis() {
+      // TODO: Implement API call to save diagnosis
+      this.$parent.showToastMessage('Saving diagnosis...');
     }
   }
 }

@@ -1,4 +1,4 @@
-#!/home/ubuntu/SolarMed-AI/backend/venv/bin/python3
+#!/home/alvin/Desktop/github/SolarMed-AI/backend/venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
