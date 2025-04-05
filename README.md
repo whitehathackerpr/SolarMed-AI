@@ -43,7 +43,7 @@ SolarMed AI is an offline-first rural healthcare diagnosis system designed speci
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/solarmed-ai.git
+git clone https://github.com/whitehathackerpr/solarmed-ai.git
 cd solarmed-ai
 ```
 
