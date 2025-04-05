@@ -2,7 +2,7 @@
 
 import { createStore } from 'vuex'
 import api from '../services/api'
-import offlineStorage from '../services/offlineStorage'
+import { offlineStorage } from '../services/offlineStorage'
 
 export default createStore({
   state: {

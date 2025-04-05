@@ -5,7 +5,7 @@
  * This service handles both online and offline modes
  */
 
-import offlineStorage from './offlineStorage';
+import { offlineStorage } from './offlineStorage';
 
 // Base API URL from environment variable
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
